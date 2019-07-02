@@ -7,6 +7,7 @@ import Block from './block';
 
 import * as data from '../../data';
 
+import "./report-form.css";
 
 export default class ReportForm extends React.Component {
   state = {
@@ -20,14 +21,14 @@ export default class ReportForm extends React.Component {
     nausea: '',
     PN: '',
     mixtureS: '',
-    volumeOneS: 10,
-    howOftenS: 1,
+    volumeOneS: '',
+    howOftenS: '',
     taste: '',
     reasonForChangeS: '',
     tube: '',
     mixtureEN: '',
-    volumeOneEN: 10,
-    howOftenEN: 1,
+    volumeOneEN: '',
+    howOftenEN: '',
     reasonForChangeEN: '',
     doctor: '',
     disabled: true
@@ -59,8 +60,8 @@ export default class ReportForm extends React.Component {
 
   render() {
     return (
-      <div>
-        <Block header="Что тут писать?">
+      <div className="report-form">
+        <Block>
           <Select
             className="form-group"
             onChange={this.handleSelected}
@@ -83,7 +84,7 @@ export default class ReportForm extends React.Component {
           />
         </Block>
 
-        <Block header="Что тут писать? (Общая информация)">
+        <Block>
           <Select
             className="form-group"
             onChange={this.handleSelected}
@@ -127,6 +128,7 @@ export default class ReportForm extends React.Component {
             className="form-group form-control"
             type="number"
             name="volumeOneS"
+            placeholder="Объем за раз (мл)"
             value={this.state.volumeOneS}
             onChange={this.handleChange}
             min={10}
@@ -136,6 +138,7 @@ export default class ReportForm extends React.Component {
             className="form-group form-control"
             type="number"
             name="howOftenS"
+            placeholder="Частота приема (раз в сутки)"
             value={this.state.howOftenS}
             onChange={this.handleChange}
             min={1}
@@ -173,6 +176,7 @@ export default class ReportForm extends React.Component {
             className="form-group form-control"
             type="number"
             name="volumeOneEN"
+            placeholder="Объем за раз (мл)"
             value={this.state.volumeOneEN}
             onChange={this.handleChange}
             min={10}
@@ -182,6 +186,7 @@ export default class ReportForm extends React.Component {
             className="form-group form-control"
             type="number"
             name="howOftenEN"
+            placeholder="Частота приема (раз в сутки)"
             value={this.state.howOftenEN}
             onChange={this.handleChange}
             min={1}
