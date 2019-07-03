@@ -30,19 +30,19 @@ export default class AddForm extends React.Component{
   render() {
     return (
       <form className="add-form d-flex" onSubmit={ this.onSubmit }>
-        <input className="mr-1 border-success"
+        <input className="mr-1 border-success border-radius"
                type="text"
                value={ this.state.name }
                onChange={ this.onChangeName }
                placeholder={ "Имя" }
         />
-        <input className="mr-1 border-success"
+        <input className="mr-1 border-success border-radius"
                type="number"
                value={ this.state.id }
                onChange={ this.onChangeId }
                placeholder={ "Номер" }
         />
-        <button type="submit" className="btn btn-success"> Добавить </button>
+        <button type="submit" className="btn btn-success border-radius"> Добавить </button>
       </form>
     )
   }

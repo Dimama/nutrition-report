@@ -10,6 +10,8 @@ const PN = ['нет', 'частичное', 'полное'];
 
 const taste = ['очень нравится', 'нравится', 'нормально', 'не нравится', 'очень не нравится', 'отказывается'];
 
+const ration = ['да', 'минимальное питание', 'нет'];
+
 const tube = ['назогастральный зонд', 'гастростома', 'назоинтестинальный зонд', 'еюностома'];
 
 const reasonForChange = ['нет в аптеке', 'плохая переносимость', 'не нравится вкус'];
@@ -31,4 +33,4 @@ const mixture = ['Изосурс стандарт', 'Изосурс Энердж
 
 const doctors = ['Вашура А.Ю.', 'Васильева Е.С.', 'Шамсутдинова М.С.', 'Алымова Ю.А.', 'Другой'];
 
-export {stool, vomit, nausea, appetite, PN, mixture, reasonForChange, taste, tube, doctors};
+export {stool, vomit, nausea, appetite, PN, mixture, reasonForChange, taste, tube, ration, doctors};

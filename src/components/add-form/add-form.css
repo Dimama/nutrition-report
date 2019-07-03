@@ -3,3 +3,7 @@
     justify-content: center;
     margin-top: 2%;
 }
+
+.border-radius {
+    border-radius: 0.45rem;
+}

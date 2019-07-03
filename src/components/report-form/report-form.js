@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import Select from 'react-select';
 
-import Block from './block';
+import Block, { HiddenBlock } from './block';
 
 import * as data from '../../data';
 
@@ -63,20 +63,20 @@ export default class ReportForm extends React.Component {
       <div className="report-form">
         <Block>
           <Select
-            className="form-group"
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(this.state.patients, 'patient')}
             placeholder={"Пациент"}
           />
           <input
-            className="form-group form-control"
+            className="form-group form-control border-radius input-item"
             type="date"
             name="dateFrom"
             value={this.state.dateFrom}
             onChange={this.handleChange}
           />
           <input
-            className="form-group form-control"
+            className="form-group form-control border-radius input-item"
             type="date"
             name="dateTo"
             value={this.state.dateTo}
@@ -86,46 +86,46 @@ export default class ReportForm extends React.Component {
 
         <Block>
           <Select
-            className="form-group"
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(data.stool, 'stool')}
             placeholder={"Стул"}
           />
           <Select
-            className="form-group"
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(data.vomit, 'vomit')}
             placeholder={"Рвота"}
           />
           <Select
-            className="form-group"
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(data.nausea, 'nausea')}
             placeholder={"Тошнота"}
           />
           <Select
-            className="form-group"
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(data.appetite, 'appetite')}
             placeholder={"Аппетит"}
           />
           <Select
-            className="form-group"
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(data.PN, 'PN')}
             placeholder={"Парантеральное питание"}
           />
         </Block>
 
-        <Block header="Сипинг">
+        <HiddenBlock header="Сипинг">
           <Select
-            className="form-group"
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(data.mixture, 'mixtureS')}
             placeholder={"Смесь"}
           />
           <input
-            className="form-group form-control"
+            className="form-group form-control input-item border-radius"
             type="number"
             name="volumeOneS"
             placeholder="Объем за раз (мл)"
@@ -135,7 +135,7 @@ export default class ReportForm extends React.Component {
             max={3000}
           />
           <input
-            className="form-group form-control"
+            className="form-group form-control input-item"
             type="number"
             name="howOftenS"
             placeholder="Частота приема (раз в сутки)"
@@ -145,35 +145,35 @@ export default class ReportForm extends React.Component {
             max={12}
           />
           <Select
-            className="form-group"
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(data.taste, 'taste')}
             placeholder={"Вкус"}
           />
           <Select
-            className="form-group"
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(data.reasonForChange, 'reasonForChangeS')}
             placeholder={"Причина замены"}
           />
-        </Block>
+        </HiddenBlock>
 
 
-        <Block header="Энтеральное питание">
+        <HiddenBlock header="Энтеральное питание">
           <Select
-            className="form-group"
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(data.tube, 'tube')}
             placeholder={"Доступ"}
           />
           <Select
-            className="form-group"
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(data.mixture, 'mixtureEN')}
             placeholder={"Смесь"}
           />
           <input
-            className="form-group form-control"
+            className="form-group form-control border-radius input-item"
             type="number"
             name="volumeOneEN"
             placeholder="Объем за раз (мл)"
@@ -183,7 +183,7 @@ export default class ReportForm extends React.Component {
             max={3000}
           />
           <input
-            className="form-group form-control"
+            className="form-group form-control border-radius input-item"
             type="number"
             name="howOftenEN"
             placeholder="Частота приема (раз в сутки)"
@@ -193,22 +193,28 @@ export default class ReportForm extends React.Component {
             max={12}
           />
           <Select
-            className="form-group"
+            className="form-group border-radius"
+            onChange={this.handleSelected}
+            options={this._makeOptionsForSelect(data.ration, 'ration')}
+            placeholder={"Основной рацион"}
+          />
+          <Select
+            className="form-group border-radius"
             onChange={this.handleSelected}
             options={this._makeOptionsForSelect(data.reasonForChange, 'reasonForChangeEN')}
             placeholder={"Причина замены"}
           />
-        </Block>
+        </HiddenBlock>
 
         <Block>
           <div className="d-flex">
             <Select
-              className="form-group flex-grow-1 m-1"
+              className="form-group flex-grow-1 m-1 border-radius"
               onChange={this.handleSelected}
               options={this._makeOptionsForSelect(data.doctors, 'doctor')}
               placeholder={"Диетолог"}
             />
-            <button className="btn btn-success m-1"
+            <button className="btn btn-success m-1 border-radius"
                     type="submit"
                     onClick={this.handleSubmit}>
               Добавить
