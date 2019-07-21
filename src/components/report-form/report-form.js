@@ -1,35 +1,43 @@
 import React from 'react';
 
 import moment from 'moment';
-import Select from 'react-select';
 
+import CustomSelect from  './custom-select';
+import Select from 'react-select'; // TODO: remove
 import Block, { HiddenBlock } from './block';
 
 import * as data from '../../data';
 
 import "./report-form.css";
 
+
 export default class ReportForm extends React.Component {
   state = {
     patients: [],
     patient: '',
-    dateFrom: '',
+    dateFrom: moment().format("YYYY-MM-DD"),
     dateTo: moment().format("YYYY-MM-DD"),
     stool: '',
     vomit: '',
     appetite: '',
+    mucositis: '',
     nausea: '',
-    PN: '',
-    mixtureS: '',
-    volumeOneS: '',
-    howOftenS: '',
-    taste: '',
-    reasonForChangeS: '',
+    sipping: [{
+      mixture: '',
+      volumeOne: '',
+      howOften: '',
+      taste: '',
+      reasonForChange: '',
+    }],
     tube: '',
-    mixtureEN: '',
-    volumeOneEN: '',
-    howOftenEN: '',
-    reasonForChangeEN: '',
+    EN: [{
+      mixture: '',
+      volumeOne: '',
+      howOften: '',
+    }],
+    components: '',
+    interval: '',
+    needs: '',
     doctor: '',
     disabled: true
   };
@@ -42,19 +50,140 @@ export default class ReportForm extends React.Component {
   handleChange = (e) => {
     const {name, value} = e.target;
     this.setState({[name]: value});
+    this._checkFill();
   };
 
-  handleSelected = ({label, name}) => {
-    this.setState({[name]: label});
+  handleSelected = (option, action, name)   => {
+    if (action === 'select-option') {
+      this.setState({[name]: option.label});
+    } else if (action === 'clear') {
+      this.setState({[name]: ''})
+    }
+    this._checkFill();
   };
 
   handleSubmit = () => {
-    console.log(this.state);
+
+    if (this._checkDates(this.state.dateTo, this.state.dateFrom)) {
+      console.log(this.state);
+    } else {
+      alert("Введите корректные даты")
+    }
+
   };
 
-  _makeOptionsForSelect = (items, name) => {
+  handleClickAddSipping = () => {
+
+    let sipping = this.state.sipping;
+    sipping.push({
+      mixture: '',
+      volumeOne: '',
+      howOften: '',
+      taste: '',
+      reasonForChangeS: '',
+    });
+
+    this.setState({
+      sipping: sipping
+    })
+  };
+
+  handleClickAddEN = () => {
+    let EN = this.state.EN;
+    EN.push({
+      mixture: '',
+      volumeOne: '',
+      howOften: '',
+    });
+
+    this.setState({
+      EN: EN
+    })
+  };
+
+  _makeSippingList = () => {
+    return  this.state.sipping.map((item, index) => {
+      return (
+        <HiddenBlock header={`Cмесь ${index+1}`}>
+          <CustomSelect
+            name="mixtureS" placeholder="Cмесь"
+            options={this._makeOptionsForSelect(data.mixture)}
+          />
+          <input
+            className="form-group form-control input-item border-radius"
+            type="number"
+            name="volumeOne"
+            placeholder="Объем за раз (мл)"
+            value={this.state.sipping[index].volumeOne}
+            min={10}
+            max={3000}
+          />
+          <input
+            className="form-group form-control input-item"
+            type="number"
+            name="howOftenS"
+            placeholder="Частота приема (раз в сутки)"
+            value={this.state.sipping[index].howOften}
+            min={1}
+            max={12}
+          />
+          <CustomSelect
+            name="taste" placeholder="Вкус"
+            options={this._makeOptionsForSelect(data.taste)}
+          />
+          <CustomSelect
+            name="reasonForChangeS" placeholder="Причина замены"
+            options={this._makeOptionsForSelect(data.reasonForChange)}
+          />
+        </HiddenBlock>
+      )
+    })
+  };
+
+  _makeENList = () => {
+    return  this.state.EN.map((item, index) => {
+      return (
+        <HiddenBlock header={`Cмесь ${index+1}`}>
+          <CustomSelect
+            name="mixtureS" placeholder="Cмесь"
+            options={this._makeOptionsForSelect(data.mixture)}
+          />
+          <input
+            className="form-group form-control input-item border-radius"
+            type="number"
+            name="volumeOne"
+            placeholder="Объем за раз (мл)"
+            value={this.state.EN[index].volumeOne}
+            min={10}
+            max={3000}
+          />
+          <input
+            className="form-group form-control input-item"
+            type="number"
+            name="howOftenS"
+            placeholder="Частота приема (раз в сутки)"
+            value={this.state.EN[index].howOften}
+            min={1}
+            max={12}
+          />
+        </HiddenBlock>)
+    })
+  };
+
+  _checkDates = (dateTo, dateFrom) => {
+    return true;
+  };
+
+  _checkFill = () => {
+    const {patient, doctor, dateTo, dateFrom} = this.state;
+    console.log(doctor);
+    console.log(!patient, !doctor, !dateTo, !dateFrom);
+    this.setState({disabled: (!patient || !doctor || !dateTo || !dateFrom)})
+  };
+
+  _makeOptionsForSelect = (items) => {
     return items.map(item => {
-      return {value: item, label: item, name: name};
+      return {value: item, label: item};
     })
   };
 
@@ -62,11 +191,9 @@ export default class ReportForm extends React.Component {
     return (
       <div className="report-form">
         <Block>
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(this.state.patients, 'patient')}
-            placeholder={"Пациент"}
+          <CustomSelect
+            name="patient" placeholder="Пациент" handleSelected={this.handleSelected}
+            options={this._makeOptionsForSelect(this.state.patients)}
           />
           <input
             className="form-group form-control border-radius input-item"
@@ -85,79 +212,36 @@ export default class ReportForm extends React.Component {
         </Block>
 
         <Block>
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(data.stool, 'stool')}
-            placeholder={"Стул"}
+          <CustomSelect
+            name="appetite" placeholder="Аппетит" handleSelected={this.handleSelected}
+            options={this._makeOptionsForSelect(data.appetite)}
           />
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(data.vomit, 'vomit')}
-            placeholder={"Рвота"}
+          <CustomSelect
+            name="mucositis" placeholder="Мукозит" handleSelected={this.handleSelected}
+            options={this._makeOptionsForSelect(data.mucositis)}
           />
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(data.nausea, 'nausea')}
-            placeholder={"Тошнота"}
+          <CustomSelect
+            name="nausea" placeholder="Тошнота" handleSelected={this.handleSelected}
+            options={this._makeOptionsForSelect(data.nausea)}
           />
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(data.appetite, 'appetite')}
-            placeholder={"Аппетит"}
+          <CustomSelect
+            name="vomit" placeholder="Рвота" handleSelected={this.handleSelected}
+            options={this._makeOptionsForSelect(data.vomit)}
           />
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(data.PN, 'PN')}
-            placeholder={"Парантеральное питание"}
+          <CustomSelect
+            name="stool" placeholder="Стул" handleSelected={this.handleSelected}
+            options={this._makeOptionsForSelect(data.stool)}
+          />
+          <CustomSelect
+            name="ration" placeholder="Обычная пища" handleSelected={this.handleSelected}
+            options={this._makeOptionsForSelect(data.ration)}
           />
         </Block>
 
         <HiddenBlock header="Сипинг">
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(data.mixture, 'mixtureS')}
-            placeholder={"Смесь"}
-          />
-          <input
-            className="form-group form-control input-item border-radius"
-            type="number"
-            name="volumeOneS"
-            placeholder="Объем за раз (мл)"
-            value={this.state.volumeOneS}
-            onChange={this.handleChange}
-            min={10}
-            max={3000}
-          />
-          <input
-            className="form-group form-control input-item"
-            type="number"
-            name="howOftenS"
-            placeholder="Частота приема (раз в сутки)"
-            value={this.state.howOftenS}
-            onChange={this.handleChange}
-            min={1}
-            max={12}
-          />
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(data.taste, 'taste')}
-            placeholder={"Вкус"}
-          />
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(data.reasonForChange, 'reasonForChangeS')}
-            placeholder={"Причина замены"}
-          />
+          { this._makeSippingList()}
+          <button className="btn-success fa fa-plus border-radius" onClick={ this.handleClickAddSipping }/>
         </HiddenBlock>
-
 
         <HiddenBlock header="Энтеральное питание">
           <Select
@@ -166,43 +250,22 @@ export default class ReportForm extends React.Component {
             options={this._makeOptionsForSelect(data.tube, 'tube')}
             placeholder={"Доступ"}
           />
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(data.mixture, 'mixtureEN')}
-            placeholder={"Смесь"}
+          { this._makeENList() }
+          <button className="btn-success fa fa-plus border-radius" onClick={ this.handleClickAddEN }/>
+        </HiddenBlock>
+
+        <HiddenBlock header="Парентеральное питание">
+          <CustomSelect
+            name="components" placeholder="Компоненты" handleSelected={this.handleSelected}
+            options={this._makeOptionsForSelect(data.components)}
           />
-          <input
-            className="form-group form-control border-radius input-item"
-            type="number"
-            name="volumeOneEN"
-            placeholder="Объем за раз (мл)"
-            value={this.state.volumeOneEN}
-            onChange={this.handleChange}
-            min={10}
-            max={3000}
+          <CustomSelect
+            name="interval" placeholder="Интервал" handleSelected={this.handleSelected}
+            options={this._makeOptionsForSelect(data.interval)}
           />
-          <input
-            className="form-group form-control border-radius input-item"
-            type="number"
-            name="howOftenEN"
-            placeholder="Частота приема (раз в сутки)"
-            value={this.state.howOftenEN}
-            onChange={this.handleChange}
-            min={1}
-            max={12}
-          />
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(data.ration, 'ration')}
-            placeholder={"Основной рацион"}
-          />
-          <Select
-            className="form-group border-radius"
-            onChange={this.handleSelected}
-            options={this._makeOptionsForSelect(data.reasonForChange, 'reasonForChangeEN')}
-            placeholder={"Причина замены"}
+          <CustomSelect
+            name="needs" placeholder="Приблизительное обеспечение потребности" handleSelected={this.handleSelected}
+            options={this._makeOptionsForSelect(data.needs)}
           />
         </HiddenBlock>
 
@@ -212,18 +275,18 @@ export default class ReportForm extends React.Component {
               className="form-group flex-grow-1 m-1 border-radius"
               onChange={this.handleSelected}
               options={this._makeOptionsForSelect(data.doctors, 'doctor')}
-              placeholder={"Диетолог"}
+              placeholder={"Врач"}
             />
             <button className="btn btn-success m-1 border-radius"
                     type="submit"
-                    onClick={this.handleSubmit}>
-              Добавить
+                    onClick={this.handleSubmit}
+                    disabled={this.state.disabled}
+            >
+              Сохранить
             </button>
           </div>
         </Block>
       </div>
-
-
     )
   }
 }
