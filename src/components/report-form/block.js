@@ -26,8 +26,8 @@ class HiddenBlock extends React.Component {
   render() {
     const {children, header} = this.props;
     const bodyStyle = this.state.isHidden ? "card-body my-hidden" : "card-body";
-    const btnStyle = this.state.isHidden ? "btn-success fa fa-angle-down border-radius" :
-                                           "btn-success fa fa-angle-up border-radius";
+    const btnStyle = this.state.isHidden ? "btn-success fa fa-caret-down border-radius" :
+                                           "btn-success fa fa-caret-up border-radius";
 
     return (
       <div className="card border-success mb-1 select border-radius">
