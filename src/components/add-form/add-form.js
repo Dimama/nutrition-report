@@ -1,31 +1,45 @@
 import React from 'react';
 
 import './add-form.css';
+import APIService from "../../api-service";
 
 
 export default class AddForm extends React.Component{
+
+  constructor(props) {
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  apiService = new APIService();
+
   state = {
-    id: '',
+    name: '',
     disabled: true
   };
 
-  onSubmit = (e) => {
+  async onSubmit (e)  {
     e.preventDefault();
-    const { id } = this.state;
-    console.log("Post to api");
+    const { name } = this.state;
+    try {
+      const message = await this.apiService.addPatient(name);
+      alert(message);
+    } catch (e) {
+      alert(e);
+    }
   };
 
   onChangeId = (e) => {
     const disabled = (e.target.value === "");
-    this.setState({id: e.target.value, disabled: disabled})
+    this.setState({name: e.target.value, disabled: disabled})
   };
 
   render() {
     return (
       <form className="add-form d-flex" onSubmit={ this.onSubmit }>
         <input className="mr-1 border-success border-radius"
-               name="id"
-               value={ this.state.id }
+               name="name"
+               value={ this.state.name }
                onChange={ this.onChangeId }
                placeholder={ "Номер" }
         />

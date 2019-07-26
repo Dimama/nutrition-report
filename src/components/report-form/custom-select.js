@@ -9,7 +9,7 @@ const CustomSelect = ({name, placeholder, options, handleSelected, arrayParams})
   return (<div title={ placeholder }>
             <Select
               className="form-group border-radius"
-              onChange={ (option, {action}) => handleSelected(option, action, name, ... additionalParams) }
+              onChange={ (option, {action}) => handleSelected(option, action, name, ...additionalParams) }
               options={ options }
               placeholder={ placeholder }
               blurInputOnSelect={ true }

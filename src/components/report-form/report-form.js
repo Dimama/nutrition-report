@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import CustomSelect from  './custom-select';
 import Block, { HiddenBlock } from './block';
+import APIService from '../../api-service';
 
 import * as data from '../../data';
 
@@ -10,6 +11,14 @@ import "./report-form.css";
 
 
 export default class ReportForm extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  apiService = new APIService();
+
   state = {
     patients: [],
     patient: '',
@@ -42,9 +51,13 @@ export default class ReportForm extends React.Component {
     disabled: true
   };
 
-  componentDidMount() {
-    const patients = ['Иванов 001', 'Сидоров 002', 'Петров 003']; // TODO: get via fetch
-    this.setState({patients: patients})
+  async componentDidMount() {
+    try {
+      const patients = await this.apiService.getPatients();
+      this.setState({patients: patients})
+    } catch (e) {
+      alert(e);
+    }
   }
 
   handleChange = (e) => {
@@ -81,9 +94,14 @@ export default class ReportForm extends React.Component {
     this.setState({[arrayName]: changedArray});
   };
 
-  handleSubmit = () => {
+  async handleSubmit () {
     if (this._datesIsCorrect(this.state.dateTo, this.state.dateFrom)) {
-      console.log(this.state); // TODO: send request to api
+      try {
+        const message = await this.apiService.addReport(this._prepareReportData());
+        alert(message);
+      } catch (e) {
+        alert(e);
+      }
     } else {
       alert("Проверьте введенные даты")
     }
@@ -218,6 +236,15 @@ export default class ReportForm extends React.Component {
     return items.map(item => {
       return {value: item, label: item};
     })
+  };
+
+  _prepareReportData = () => {
+    let data = this.state;
+
+    delete data.patients;
+    delete data.disabled;
+
+    return data;
   };
 
   render() {
