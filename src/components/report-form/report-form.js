@@ -108,7 +108,7 @@ export default class ReportForm extends React.Component {
   };
 
   handleClickAddSipping = () => {
-    let sipping = this.state.sipping;
+    let sipping = Object.assign([], this.state.sipping);
     sipping.push({
       mixture: '',
       volumeOne: '',
@@ -123,7 +123,7 @@ export default class ReportForm extends React.Component {
   };
 
   handleClickAddEN = () => {
-    let EN = this.state.EN;
+    let EN = Object.assign([], this.state.EN);
     EN.push({
       tube: '',
       mixture: '',
@@ -239,7 +239,7 @@ export default class ReportForm extends React.Component {
   };
 
   _prepareReportData = () => {
-    let data = this.state;
+    let data = Object.assign({}, this.state);
 
     delete data.patients;
     delete data.disabled;
