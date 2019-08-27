@@ -36,6 +36,7 @@ export default class ReportForm extends React.Component {
       howOften: '',
       taste: '',
       reasonForChange: '',
+      isHidden: false,
     }],
     EN: [{
       tube: '',
@@ -43,6 +44,7 @@ export default class ReportForm extends React.Component {
       volumeOne: '',
       howOften: '',
       reasonForChange: '',
+      isHidden: false,
     }],
     components: '',
     interval: '',
@@ -116,6 +118,7 @@ export default class ReportForm extends React.Component {
       howOften: '',
       taste: '',
       reasonForChange: '',
+      isHidden: true,
     });
 
     this.setState({
@@ -131,6 +134,7 @@ export default class ReportForm extends React.Component {
       volumeOne: '',
       howOften: '',
       reasonForChange: '',
+      isHidden: true,
     });
 
     this.setState({
@@ -139,9 +143,9 @@ export default class ReportForm extends React.Component {
   };
 
   _makeSippingList = () => {
-    return  this.state.sipping.map((item, index) => {
+    return  this.state.sipping.map(({isHidden}, index) => {
       return (
-        <HiddenBlock header={`Cмесь ${index+1}`} key={index}>
+        <HiddenBlock header={`Cмесь ${index+1}`} key={index} isHidden={isHidden}>
           <CustomSelect
             name="mixture" placeholder="Cмесь" handleSelected={this.handleSelectedItem}
             options={this._makeOptionsForSelect(data.mixture)}
@@ -183,9 +187,9 @@ export default class ReportForm extends React.Component {
   };
 
   _makeENList = () => {
-    return  this.state.EN.map((item, index) => {
+    return  this.state.EN.map(({isHidden}, index) => {
       return (
-        <HiddenBlock header={`Cмесь ${index+1}`} key={index}>
+        <HiddenBlock header={`Cмесь ${index+1}`} key={index} isHidden={isHidden}>
           <CustomSelect
             name="tube" placeholder="Доступ" handleSelected={this.handleSelectedItem}
             options={this._makeOptionsForSelect(data.tube)}
@@ -301,17 +305,17 @@ export default class ReportForm extends React.Component {
           />
         </Block>
 
-        <HiddenBlock header="Сипинг">
+        <HiddenBlock header="Сипинг" isHidden={true}>
           { this._makeSippingList()}
           <button className="btn btn-success fa fa-plus border-radius" onClick={ this.handleClickAddSipping }/>
         </HiddenBlock>
 
-        <HiddenBlock header="Энтеральное питание">
+        <HiddenBlock header="Энтеральное питание" isHidden={true}>
           { this._makeENList() }
           <button className="btn btn-success fa fa-plus border-radius" onClick={ this.handleClickAddEN }/>
         </HiddenBlock>
 
-        <HiddenBlock header="Парентеральное питание">
+        <HiddenBlock header="Парентеральное питание" isHidden={true}>
           <CustomSelect
             name="components" placeholder="Компоненты" handleSelected={this.handleSelected}
             options={this._makeOptionsForSelect(data.components)}

@@ -16,7 +16,7 @@ const Block = ({children, header}) => {
 class HiddenBlock extends React.Component {
 
   state = {
-    isHidden: true
+    isHidden: this.props.isHidden
   };
 
   handleClick = () => {
