@@ -99,6 +99,7 @@ export default class ReportForm extends React.Component {
       try {
         const message = await this.apiService.addReport(this._prepareReportData());
         alert(message);
+        document.location.reload()
       } catch (e) {
         alert(e);
       }
